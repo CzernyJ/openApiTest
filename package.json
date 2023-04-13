@@ -1,0 +1,122 @@
+{
+  "name": "openapitest",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Jürgen Czerny <juergen.czerny@sovanta.com>",
+  "license": "ISC",
+  "scripts": {
+    "nest": "nest",
+    "snyk": "snyk",
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "inspect": "nest start --debug --watch",
+    "rei": "rm -rf node_modules/ package-lock.json && npm i",
+    "start": "npm run build -- && node dist/main",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "deploy:debug": "npm run build -- && npm run test -- && cf target -o ttkf-connect -s dev  && cf push -f manifest.debug.yaml",
+    "deploy:dev": "npm run build -- && npm run test -- && cf target -o ttkf-connect -s dev  && cf push -f manifest.dev.yaml",
+    "deploy:qs": "npm run build -- && npm run test -- && cf target -o ttkf-connect -s qs  && cf push -f manifest.qs.yaml",
+    "deploy:prod": "npm run build -- && npm run test -- && cf target -o ttkf-connect -s prod  && cf push -f manifest.prod.yaml",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest --maxWorkers=1",
+    "test:watch": "jest --watch --maxWorkers=1",
+    "test:cov": "npm run test -- --coverage",
+    "test:cov-ci": "npm run test:cov -- --coverageReporters=cobertura",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./src/test/jest-e2e.json",
+    "generate:api": "jest --config ./src/test/jest-e2e-api-generation.json",
+    "test:ci": "npm run test -- --watchAll=false --reporters=default --reporters=jest-junit",
+    "commit": "git-cz",
+    "recommit": "git-cz --retry",
+    "release": "standard-version",
+    "release:dry": "standard-version --dry-run"
+  },
+  "dependencies": {
+    "@nestjs/axios": "^2.0.0",
+    "@nestjs/common": "^9.3.9",
+    "@nestjs/config": "^2.3.1",
+    "@nestjs/core": "^9.3.9",
+    "@nestjs/platform-express": "^9.3.9",
+    "@nestjs/swagger": "^6.2.1",
+    "@nestjs/typeorm": "^9.0.1",
+    "@types/uuid": "^9.0.0",
+    "argon2": "^0.30.3",
+    "cache-manager": "^4.1.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "jsdom": "^21.1.0",
+    "nwsapi": "^2.2.2",
+    "pg": "^8.10.0",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^4.1.2",
+    "rxjs": "^7.8.0",
+    "typeorm": "^0.3.12",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^9.2.0",
+    "@nestjs/schematics": "^9.0.4",
+    "@nestjs/testing": "^9.3.9",
+    "@types/cache-manager": "^4.0.2",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.14.0",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "@typestrong/ts-mockito": "^2.6.5",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "git-cz": "^4.9.0",
+    "jest": "^29.4.3",
+    "jest-junit": "^15.0.0",
+    "lodash": "^4.17.21",
+    "prettier": "^2.8.4",
+    "snyk": "^1.1105.0",
+    "standard-version": "^9.5.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.0.5",
+    "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
+    "typescript": "^4.9.5"
+  },
+  "engines": {
+    "node": "^18.13.0",
+    "npm": "^8.19.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "preset": "ts-jest",
+    "setupFiles": [
+      "<rootDir>/../.jest/envVars.ts"
+    ],
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
+  },
+  "jest-junit": {
+    "suiteNameTemplate": "{filepath}",
+    "outputDirectory": ".",
+    "outputName": "junit.xml"
+  }
+}
